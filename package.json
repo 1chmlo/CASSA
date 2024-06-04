@@ -1,0 +1,30 @@
+{
+  "name": "casa2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon .",
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-promise-router": "^4.1.1",
+    "git": "^0.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "md5": "^2.3.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.11.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "eslint": "^9.3.0",
+    "nodemon": "^3.1.0"
+  }
+}
