@@ -1,13 +1,8 @@
 import Router from "express-promise-router";
 
-import {
-  login,
-  register,
-  logout,
-  profile,
-} from "../controllers/auth.controller.js";
+import { verify } from "../controllers/patentes.auth.controller.js";
 const router = Router();
 
-router.post("/login", login);
+router.get("/verify", verify);
 
 export default router;
