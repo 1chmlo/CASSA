@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { exec } from "child_process";
 import multer from "multer";
+import { pool } from "../db.js";
 
 // Define el middleware de multer
 const upload = multer({ dest: "uploads/" });
@@ -28,7 +29,7 @@ export function verifyImage(req, res, next) {
   // Ejecuta el script de Python con la imagen como argumento
   exec(
     `python ./src/verifypatente.py ${imagePathJpg}`,
-    (error, stdout, stderr) => {
+    async (error, stdout, stderr) => {
       // Elimina la imagen temporalmente guardada
       fs.unlink(imagePathJpg, (err) => {
         if (err) {
@@ -44,11 +45,31 @@ export function verifyImage(req, res, next) {
         });
       }
 
-      // Parsea la salida del script de Python como un objeto JSON
-      const result = stdout;
+      try {
+        // Parsea la salida del script de Python como un objeto JSON
+        const result = JSON.parse(stdout);
+        const patente = result.patente;
 
-      // Devuelve el resultado como respuesta
-      res.send(result);
+        // Realiza la consulta a la base de datos para verificar si la patente existe
+        const dbResult = await pool.query(
+          "SELECT * FROM autos WHERE patente = $1",
+          [patente]
+        );
+
+        if (dbResult.rowCount === 0) {
+          return res.status(404).json({
+            message: `Auto con patente ${patente} no encontrado`,
+          });
+        }
+
+        return res.json(dbResult.rows[0]);
+      } catch (err) {
+        console.error("Error al procesar la solicitud:", err);
+        return res.status(500).json({
+          error: "Error al procesar la solicitud",
+          details: err.message,
+        });
+      }
     }
   );
 }

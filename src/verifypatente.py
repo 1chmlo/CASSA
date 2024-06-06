@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import re
 import sys
-
+import json
 # Inicializa el lector de EasyOCR
 reader = easyocr.Reader(['en'])
 
@@ -65,9 +65,9 @@ def verify_plate(image_data):
         # Limpia la matrícula encontrada
         matricula_limpia = re.sub(r'[^A-Za-z0-9]', '', matricula)
 
-        return {
-            'matricula_limpia': matricula_limpia
-        }
+        return json.dumps({
+            "patente": matricula_limpia
+        })
     else:
         return {
             'error': 'No se pudo detectar la matrícula en la imagen'
