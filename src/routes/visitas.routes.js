@@ -6,17 +6,19 @@ import {
   getVisita,
   updateVisita,
 } from "../controllers/visitas.controller.js";
+import { isAuthCasa } from "../middlewares/authCasa.middleware.js";
 
 const router = Router();
 
-router.get("/visitas", getAllVisitas);
+//RUTAS PARA VISITAS
+router.get("/visitas", isAuthCasa, getAllVisitas); //CASA
 
-router.get("/visitas/:id", getVisita);
+router.get("/visitas/:id", isAuthCasa, getVisita); //CASA
 
-router.post("/visitas", createVisita);
+router.post("/visitas", isAuthCasa, createVisita); //CASA
 
-router.put("/visitas/:id", updateVisita);
+router.put("/visitas/:id", isAuthCasa, updateVisita); //CASA
 
-router.delete("/visitas/:id", deleteVisita);
+router.delete("/visitas/:id", isAuthCasa, deleteVisita); //CASA
 
 export default router;

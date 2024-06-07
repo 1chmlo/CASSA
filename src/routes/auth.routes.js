@@ -1,19 +1,35 @@
 import Router from "express-promise-router";
-
+import { isAuthCasa } from "../middlewares/authCasa.middleware.js";
 import {
-  login,
-  register,
   logout,
   profile,
+  loginCasa,
+  registerAdmin,
+  loginAdmin,
+  registerCasa,
+  registerConserje,
+  loginConserje,
 } from "../controllers/auth.controller.js";
+import { isAuthAdmin } from "../middlewares/authAdmin.middleware.js";
 const router = Router();
 
-router.post("/login", login);
+router.post("/logout", logout); //PUBLICO
 
-router.post("/register", register);
+//CASAS
+router.post("/login/casa", loginCasa); //PUBLICO
 
-router.post("/logout", logout);
+router.post("/register/casa", isAuthAdmin, registerCasa); //ADMIN
 
-router.get("/profile", profile);
+router.get("/profile", isAuthCasa, profile); //CASA
+
+//ADMIN
+router.post("/register/admin", registerAdmin); //EN TEORIA NADIE
+
+router.post("/login/admin", loginAdmin); //EN TEORIA NADIE
+
+//CONSERJE
+router.post("/login/conserje", loginConserje); //PUBLICO
+
+router.post("/register/conserje", isAuthAdmin, registerConserje); //ADMIN
 
 export default router;

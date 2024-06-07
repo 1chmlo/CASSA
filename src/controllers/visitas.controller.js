@@ -1,17 +1,91 @@
 import { pool } from "../db.js";
 
-export const getAllVisitas = (req, res) => res.send("obteniendo visitas");
-
-export const getVisita = (req, res) => res.send("obteniendo visitas");
-
-export const createVisita = (req, res) => {
-  const resultado = req.body.nombre;
-  console.log(req.body);
-  //db insert
-
-  res.send("creando visita a nombre de " + resultado);
+// Obtener todas las visitas
+export const getAllVisitas = async (req, res) => {
+  const result = await pool.query("SELECT * FROM VISITA");
+  if (result.rows.length > 0) {
+    res.json(result.rows);
+  } else {
+    res.send("No se encontraron visitas");
+  }
 };
 
-export const updateVisita = (req, res) => res.send("obteniendo visitas");
+// Crear una visita
+export const createVisita = async (req, res) => {
+  const { nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id } =
+    req.body;
 
-export const deleteVisita = (req, res) => res.send("obteniendo visitas");
+  try {
+    const result = await pool.query(
+      "INSERT INTO VISITA (nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+      [nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id]
+    );
+    res.json(result.rows[0]);
+  } catch (error) {
+    if (error.code === "23505") {
+      // código de error para UNIQUE violation
+      res.status(409).json({
+        message:
+          "Visita ya registrada para esa combinación de nombre, apellido, fecha y casa",
+      });
+    } else {
+      res.status(500).json({ message: "Error al registrar visita", error });
+    }
+  }
+};
+
+// Buscar una visita por ID
+export const getVisita = async (req, res) => {
+  const id = req.params.id;
+  const result = await pool.query("SELECT * FROM VISITA WHERE id = $1", [id]);
+  if (result.rowCount === 0) {
+    return res.status(404).json({
+      message: "Visita no encontrada",
+    });
+  }
+  return res.json(result.rows[0]);
+};
+
+// Actualizar una visita
+export const updateVisita = async (req, res) => {
+  const { id } = req.params;
+  const { nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id } =
+    req.body;
+  try {
+    const result = await pool.query(
+      "UPDATE VISITA SET nombre = $1, apellido = $2, fecha_ingreso = $3, rut = $4, patente = $5, comentario = $6, casa_id = $7 WHERE id = $8 RETURNING *",
+      [nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id, id]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Visita no encontrada",
+      });
+    }
+    return res.json(result.rows[0]);
+  } catch (error) {
+    if (error.code === "23505") {
+      // código de error para UNIQUE violation
+      res.status(409).json({
+        message:
+          "Visita ya registrada para esa combinación de nombre, apellido, fecha y casa",
+      });
+    } else {
+      res.status(500).json({ message: "Error al actualizar visita", error });
+    }
+  }
+};
+
+// Borrar una visita
+export const deleteVisita = async (req, res) => {
+  const { id } = req.params;
+  const result = await pool.query(
+    "DELETE FROM VISITA WHERE id = $1 RETURNING *",
+    [id]
+  );
+  if (result.rowCount === 0) {
+    return res.status(404).json({
+      message: "Visita no encontrada",
+    });
+  }
+  return res.json(result.rows[0]);
+};

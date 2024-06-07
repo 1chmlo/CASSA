@@ -1,22 +1,19 @@
 import Router from "express-promise-router";
 import {
-  createCasa,
   deleteCasa,
   getAllCasas,
   getCasa,
   updateCasa,
 } from "../controllers/casas.controller.js";
-
+import { isAuthAdmin } from "../middlewares/authAdmin.middleware.js";
 const router = Router();
 
-router.get("/casas", getAllCasas);
+router.get("/casas", isAuthAdmin, getAllCasas); //ver todas las casas, ADMIN
 
-router.get("/casas/:numero", getCasa);
+router.get("/casas/:numero", isAuthAdmin, getCasa); //ver una casa, ADMIN
 
-router.post("/casas", createCasa);
+router.put("/casas/:numero", isAuthAdmin, updateCasa); //actualizar casa, ADMIN
 
-router.put("/casas/:numero", updateCasa);
-
-router.delete("/casas/:numero", deleteCasa);
+router.delete("/casas/:numero", isAuthAdmin, deleteCasa); // borrar casa, ADMIN
 
 export default router;

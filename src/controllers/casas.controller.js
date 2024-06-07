@@ -1,10 +1,13 @@
 import { pool } from "../db.js";
+import bcrypt from "bcrypt";
+import { createAccessToken } from "../libs/jwt.js";
 
 //ESTA PARTE DE LAS RUTAS, SON PARA QUE EL ADMINISTRADOR GESTIONE A LOS USUARIOS (CASAS) QUE PUEDEN REGISTRAR VISITAS
 //CADA CASA ES UN USUARIO
 
 //buscar todas las casas
 export const getAllCasas = async (req, res, next) => {
+  console.log(req.userId);
   const result = await pool.query("select * from casas");
   if (result.rows.length > 0) {
     res.json(result.rows);
@@ -28,15 +31,6 @@ export const getCasa = async (req, res) => {
 };
 
 //crear una casa
-export const createCasa = async (req, res) => {
-  const { numero, calle, email, contrasena } = req.body;
-  const result = await pool.query(
-    "insert into casas (numero, calle, email, contrasena) values ($1, $2, $3, $4) RETURNING *",
-    [numero, calle, email, contrasena]
-  );
-
-  res.json(result.rows[0]);
-};
 
 //actualizar correo y contraseña de una casa
 export const updateCasa = async (req, res) => {
