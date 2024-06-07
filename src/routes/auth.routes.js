@@ -18,7 +18,7 @@ router.post("/logout", logout); //PUBLICO
 //CASAS
 router.post("/login/casa", loginCasa); //PUBLICO
 
-router.post("/register/casa", isAuthAdmin, registerCasa); //ADMIN
+router.post("/register/casa", registerCasa); //ADMIN
 
 router.get("/profile", isAuthCasa, profile); //CASA
 

@@ -37,12 +37,14 @@ export const loginCasa = async (req, res) => {
   });
 
   res.cookie("token", token, {
-    HttpOnly: true,
+    //HttpOnly: true,
+    secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
   });
   res.cookie("rol", "casa", {
-    HttpOnly: true,
+    //HttpOnly: true,
+    secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -62,6 +64,19 @@ export const registerCasa = async (req, res) => {
   const token = await createAccessToken({
     id: result.rows[0].id,
     numero: result.rows[0].numero,
+  });
+
+  res.cookie("token", token, {
+    //HttpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+  res.cookie("rol", "casa", {
+    //HttpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 24 * 60 * 60 * 1000,
   });
   res.json(result.rows[0]);
 };
