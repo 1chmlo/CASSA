@@ -1,8 +1,14 @@
 import { pool } from "../db.js";
 
-// Obtener todas las visitas
+// Obtener las visitas de una casa
 export const getAllVisitas = async (req, res) => {
-  const result = await pool.query("SELECT * FROM VISITA");
+  const casa_id = req.userId;
+  const casa_numero = req.userNumero;
+  console.log(casa_id);
+  const result = await pool.query(
+    "SELECT * FROM VISITA where casa_numero = $1",
+    [casa_numero]
+  );
   if (result.rows.length > 0) {
     res.json(result.rows);
   } else {
@@ -12,13 +18,24 @@ export const getAllVisitas = async (req, res) => {
 
 // Crear una visita
 export const createVisita = async (req, res) => {
-  const { nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id } =
+  const casa_id = req.userId;
+  const casa_numero = req.userNumero;
+  const { nombre, apellido, fecha_ingreso, rut, patente, comentario } =
     req.body;
 
   try {
     const result = await pool.query(
-      "INSERT INTO VISITA (nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      [nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id]
+      "INSERT INTO VISITA (nombre, apellido, fecha_ingreso, rut, patente, comentario, casa_id, casa_numero) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      [
+        nombre,
+        apellido,
+        fecha_ingreso,
+        rut,
+        patente,
+        comentario,
+        casa_id,
+        casa_numero,
+      ]
     );
     res.json(result.rows[0]);
   } catch (error) {

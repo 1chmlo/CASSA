@@ -22,7 +22,9 @@ export const isAuthAdmin = (req, res, next) => {
         mesage: "no estas autorizado",
       });
     req.userId = decoded.id;
+    req.userNumero = decoded.numero;
     req.userRole = rol;
+    console.log(token);
     next();
   });
 };

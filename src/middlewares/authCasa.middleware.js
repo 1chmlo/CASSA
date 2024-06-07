@@ -24,8 +24,9 @@ export const isAuthCasa = (req, res, next) => {
       });
     }
     req.userId = decoded.id;
+    req.userNumero = decoded.numero;
     req.userRole = rol;
-
+    console.log(token);
     next();
   });
 };

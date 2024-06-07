@@ -33,6 +33,7 @@ export const loginCasa = async (req, res) => {
 
   const token = await createAccessToken({
     id: result.rows[0].id,
+    numero: result.rows[0].numero,
   });
 
   res.cookie("token", token, {
@@ -60,11 +61,27 @@ export const registerCasa = async (req, res) => {
   );
   const token = await createAccessToken({
     id: result.rows[0].id,
+    numero: result.rows[0].numero,
   });
   res.json(result.rows[0]);
 };
 
-export const profile = (req, res) => res.send("perfil");
+// Obtener las visitas de una casa
+export const profile = async (req, res) => {
+  const casa_id = req.userId;
+  const casa_numero = req.userNumero;
+  console.log(casa_id);
+  const result = await pool.query("SELECT * FROM casas where id = $1", [
+    casa_id,
+  ]);
+  if (result.rows.length > 0) {
+    const { contrasena, ...perfil } = result.rows[0];
+    res.json(perfil);
+  } else {
+    res.send("No se encontraro el perfil");
+  }
+};
+
 //FUNCIONES PARA CREAR Y LOGUEAR ADMIN
 export const registerAdmin = async (req, res) => {
   const { rut, nombres, apellidos, email, contrasena } = req.body;
