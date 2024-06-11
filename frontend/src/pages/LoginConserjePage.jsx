@@ -2,24 +2,20 @@ import React from "react";
 import { Button, Card, Input, Label } from "../components/ui";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 function LoginConserjePage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { ingresarConserje } = useAuth();
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    const res = await axios.post(
-      "http://localhost:4000/api/login/conserje",
-      data,
-      {
-        withCredentials: true,
-      }
-    );
-    console.log(res);
+    await ingresarConserje(data);
+    navigate("/conserje/panel");
   });
 
   return (

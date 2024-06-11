@@ -36,6 +36,26 @@ export function AuthProvider({ children }) {
     setUser(res.data);
     setIsAuthCasa(true);
   };
+
+  //Ingresar Admin
+  const ingresarAdmin = async (data) => {
+    const res = await axios.post("http://localhost:4000/api/login/admin", data, {
+      withCredentials: true,
+    });
+    console.log(res);
+    setUser(res.data);
+    setIsAuthAdmin(true);
+  };
+
+  //Ingresar Conserje
+  const ingresarConserje = async (data) => {
+    const res = await axios.post("http://localhost:4000/api/login/conserje", data, {
+      withCredentials: true,
+    });
+    console.log(res);
+    setUser(res.data);
+    setIsAuthConserje(true);
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -46,6 +66,8 @@ export function AuthProvider({ children }) {
         errors,
         registrarResidente,
         ingresarResidente,
+        ingresarAdmin,
+        ingresarConserje,
       }}
     >
       {children}

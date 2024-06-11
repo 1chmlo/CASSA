@@ -34,11 +34,11 @@ export const getCasa = async (req, res) => {
 
 //actualizar correo y contraseña de una casa
 export const updateCasa = async (req, res) => {
-  const { numero } = req.params;
-  const { email, contrasena } = req.body;
+  const { id } = req.params;
+  const { email, contrasena, calle } = req.body;
   const result = await pool.query(
-    "update casas set email = $1, contrasena = $2 where numero = $3 returning *",
-    [email, contrasena, numero]
+    "update casas set email = $1, contrasena = $2, calle = $3, numero = $4 where id = $5 returning *",
+    [email, contrasena, calle, numero]
   );
   console.log(result);
   if (result.rowCount === 0) {

@@ -134,6 +134,7 @@ export const loginAdmin = async (req, res) => {
     return res.status(404).json({
       message: "Correo incorrecto",
     });
+    
   }
 
   const validPassword = await bcrypt.compare(

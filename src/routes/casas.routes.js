@@ -14,6 +14,6 @@ router.get("/casas/:numero", isAuthAdmin, getCasa); //ver una casa, ADMIN
 
 router.put("/casas/:numero", isAuthAdmin, updateCasa); //actualizar casa, ADMIN
 
-router.delete("/casas/:numero", isAuthAdmin, deleteCasa); // borrar casa, ADMIN
+router.delete("/casas/:id", isAuthAdmin, deleteCasa); // borrar casa, ADMIN
 
 export default router;
