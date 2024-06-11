@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Card, Input, Label } from "../components/ui";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 function RegisterResidentePage() {
   const {
     register,
@@ -10,26 +10,12 @@ function RegisterResidentePage() {
     formState: { errors },
   } = useForm();
 
+  const { registrarResidente } = useAuth();
+  const navigate = useNavigate();
+
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    /*const response = await fetch("http://localhost:4000/api/register/casa", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Controll-Allow-Credentials": true,
-      },
-    });*/
-    const res = await axios.post(
-      "http://localhost:4000/api/register/casa",
-      data,
-      {
-        withCredentials: true,
-      }
-    );
-    //const dataRegister = await response.json();
-    console.log(res);
+    await registrarResidente(data);
+    navigate("/admin/panel");
   });
 
   return (

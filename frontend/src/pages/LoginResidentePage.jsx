@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Card, Input, Label } from "../components/ui";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 function LoginResidentePage() {
   const {
     register,
@@ -10,12 +10,12 @@ function LoginResidentePage() {
     formState: { errors },
   } = useForm();
 
+  const { ingresarResidente } = useAuth();
+  const navigate = useNavigate();
+
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    const res = await axios.post("http://localhost:4000/api/login/casa", data, {
-      withCredentials: true,
-    });
-    console.log(res);
+    await ingresarResidente(data);
+    navigate("/residente/panel");
   });
 
   return (

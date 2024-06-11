@@ -12,11 +12,14 @@ import RegisterResidentePage from "./pages/RegisterResidentePage";
 import LoginAdminPage from "./pages/LoginAdminPage";
 import LoginResidentePage from "./pages/LoginResidentePage";
 import LoginConserjePage from "./pages/LoginConserjePage";
+import HomePage from "./pages/HomePage";
 function App() {
   return (
     <>
       {/*<Navbar />*/}
       <Routes>
+        <Route path="/" element={<HomePage />} />
+
         {/*LOGINS*/}
         <Route path="/login/admin" element={<LoginAdminPage />} />
         <Route path="/login/residente" element={<LoginResidentePage />} />
@@ -27,10 +30,10 @@ function App() {
         <Route path="/register/residente" element={<RegisterResidentePage />} />
         <Route path="/register/conserje" element={<RegisterConserjePage />} />
 
-        <Route path="/Admin" element={<Admin />} />
-        <Route path="/Agregarvisitas" element={<Agregarvisitas />} />
-        <Route path="/Conserje" element={<Conserje />} />
-        <Route path="/Misvisitas" element={<Misvisitas />} />
+        <Route path="/admin/panel" element={<Admin />} />
+        <Route path="/residente/agregarvisitas" element={<Agregarvisitas />} />
+        <Route path="/conserje/panel" element={<Conserje />} />
+        <Route path="/residente/panel" element={<Misvisitas />} />
       </Routes>
     </>
   );

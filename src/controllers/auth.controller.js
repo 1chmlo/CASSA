@@ -36,17 +36,26 @@ export const loginCasa = async (req, res) => {
     numero: result.rows[0].numero,
   });
 
+  /*if (req.cookies.token) {
+    res.clearCookie("token");
+  }
+  if (req.cookies.rol) {
+    res.clearCookie("rol");
+  }*/
+
   res.cookie("token", token, {
     //HttpOnly: true,
     secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
   });
   res.cookie("rol", "casa", {
     //HttpOnly: true,
     secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
   });
 
   return res.json(result.rows[0]);
@@ -66,7 +75,7 @@ export const registerCasa = async (req, res) => {
     numero: result.rows[0].numero,
   });
 
-  res.cookie("token", token, {
+  /*res.cookie("token", token, {
     //HttpOnly: true,
     secure: true,
     sameSite: "none",
@@ -77,7 +86,7 @@ export const registerCasa = async (req, res) => {
     secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
-  });
+  });*/
   res.json(result.rows[0]);
 };
 
@@ -141,16 +150,25 @@ export const loginAdmin = async (req, res) => {
   const token = await createAccessToken({
     id: result.rows[0].id,
   });
-
+  /*if (req.cookies.token) {
+    res.clearCookie("token");
+  }
+  if (req.cookies.rol) {
+    res.clearCookie("rol");
+  }*/
   res.cookie("token", token, {
-    HttpOnly: true,
+    //HttpOnly: true,
+    secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
   });
   res.cookie("rol", "admin", {
-    HttpOnly: true,
+    //HttpOnly: true,
+    secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
   });
 
   return res.json(result.rows[0]);
@@ -185,16 +203,23 @@ export const loginConserje = async (req, res) => {
   const token = await createAccessToken({
     id: result.rows[0].id,
   });
-
+  /*if (req.cookies.token) {
+    res.clearCookie("token");
+  }
+  if (req.cookies.rol) {
+    res.clearCookie("rol");
+  }*/
   res.cookie("token", token, {
-    HttpOnly: true,
+    secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
   });
   res.cookie("rol", "conserje", {
-    HttpOnly: true,
+    secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
   });
 
   return res.json(result.rows[0]);
