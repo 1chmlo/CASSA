@@ -17,8 +17,8 @@ router.get("/autos/:patente", isAuthConserje, getAuto); //CONSERJE Y ADMIN
 
 router.post("/autos", isAuthAdmin, createAuto); //ADMIN
 
-router.put("/autos/:patente", isAuthAdmin, updateAuto); //ADMIN
+router.put("/autos/", isAuthAdmin, updateAuto); //ADMIN
 
-router.delete("/autos/:patente", isAuthAdmin, deleteAuto); //ADMIN
+router.delete("/autos/", isAuthAdmin, deleteAuto); //ADMIN
 
 export default router;

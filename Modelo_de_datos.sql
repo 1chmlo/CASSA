@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS VISITA (
     patente VARCHAR(6), -- opcional
     comentario VARCHAR(200), -- opcional
     casa_id INT NOT NULL,
+    casa_numero INT NOT NULL,
     FOREIGN KEY (casa_id) REFERENCES CASAS(id),
+    FOREIGN KEY (casa_numero) REFERENCES CASAS(numero),
     CONSTRAINT unique_visita UNIQUE (nombre, apellido, fecha_ingreso, casa_id)
 );

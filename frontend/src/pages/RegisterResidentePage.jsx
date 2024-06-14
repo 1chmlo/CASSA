@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Input, Label } from "../components/ui";
+import { Button, Card, Input, Label, BackButton } from "../components/ui";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -68,6 +68,7 @@ function RegisterResidentePage() {
           )}
           <Button>Registrar Casa</Button>
         </form>
+        <BackButton />
       </Card>
     </div>
   );

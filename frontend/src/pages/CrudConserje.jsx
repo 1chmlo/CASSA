@@ -6,66 +6,63 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../components/navbar/AdminNavbar";
 
-const CrudResidentes = () => {
-  const [residentes, setResidentes] = useState([]);
+const CrudConserjes = () => {
+  const [conserjes, setConserjes] = useState([]);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const { registrarResidente } = useAuth();
+  const { registrarConserje } = useAuth();
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
-  const [currentResidente, setCurrentResidente] = useState(null);
+  const [currentConserje, setCurrentConserje] = useState(null);
 
-  const fetchResidentes = async () => {
+  const fetchConserjes = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/casas", {
+      const response = await axios.get("http://localhost:4000/api/conserje", {
         withCredentials: true,
       });
-      setResidentes(response.data);
+      setConserjes(response.data);
     } catch (error) {
-      console.error("Error fetching residentes:", error);
+      console.error("Error fetching conserjes:", error);
     }
   };
 
   useEffect(() => {
-    fetchResidentes();
+    fetchConserjes();
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
     if (editing) {
       try {
         await axios.put(
-          "http://localhost:4000/api/casas",
-          {
-            ...data,
-            id: currentResidente.id,
-          },
+          "http://localhost:4000/api/conserje",
+          { ...data, id: currentConserje.id },
           { withCredentials: true }
         );
-        fetchResidentes();
+        fetchConserjes();
         setEditing(false);
         reset();
       } catch (error) {
-        console.error("Error updating residente:", error);
+        console.error("Error updating conserje:", error);
       }
     } else {
       try {
-        await registrarResidente(data);
-        fetchResidentes();
+        await registrarConserje(data);
+        fetchConserjes();
         reset();
       } catch (error) {
-        console.error("Error creating residente:", error);
+        console.error("Error creating conserje:", error);
       }
     }
   });
 
-  const editResidente = (residente) => {
+  const editConserje = (conserje) => {
     setEditing(true);
-    setCurrentResidente(residente);
-    reset(residente);
+    setCurrentConserje(conserje);
+    reset(conserje);
   };
 
   const cancelEdit = () => {
@@ -73,15 +70,15 @@ const CrudResidentes = () => {
     reset();
   };
 
-  const deleteResidente = async (id) => {
+  const deleteConserje = async (id) => {
     try {
-      await axios.delete("http://localhost:4000/api/casas", {
+      await axios.delete("http://localhost:4000/api/conserje", {
         data: { id },
         withCredentials: true,
       });
-      fetchResidentes();
+      fetchConserjes();
     } catch (error) {
-      console.error("Error deleting residente:", error);
+      console.error("Error deleting conserje:", error);
     }
   };
 
@@ -91,51 +88,53 @@ const CrudResidentes = () => {
       <div className="p-4 px-60">
         <Card>
           <h3 className="text-2xl font-bold">
-            {editing ? "Editar Casa" : "Registro Casa"}
+            {editing ? "Editar Conserje" : "Registro Conserje"}
           </h3>
           <form onSubmit={onSubmit}>
-            <Label htmlFor="email">Email Casa</Label>
+            <Label htmlFor="email">Email Conserje</Label>
             <Input
-              placeholder="Ingrese numero casa"
+              placeholder="Ingrese email conserje"
               {...register("email", { required: true })}
             />
             {errors.email && (
               <p className="text-red-500">El email es obligatorio</p>
             )}
-            <Label htmlFor="contrasena">contraseña Casa</Label>
+            <Label htmlFor="contrasena">Contraseña Conserje</Label>
             <Input
               type="password"
-              placeholder="Ingrese contrasena"
+              placeholder="Ingrese contraseña"
               {...register("contrasena", { required: true })}
             />
             {errors.contrasena && (
               <p className="text-red-500">La contraseña es obligatoria</p>
             )}
-            {!editing && (
-              <>
-                <Label htmlFor="numero">numero</Label>
-                <Input
-                  type="numero"
-                  placeholder="Ingrese numero"
-                  {...register("numero", { required: true })}
-                />
-                {errors.numero && (
-                  <p className="text-red-500">El numero es obligatorio</p>
-                )}
-                <Label htmlFor="calle">calle</Label>
-                <Input
-                  type="text"
-                  placeholder="Ingrese calle"
-                  {...register("calle", { required: true })}
-                />
-                {errors.calle && (
-                  <p className="text-red-500">La calle es obligatoria</p>
-                )}
-              </>
+            <Label htmlFor="rut">RUT Conserje</Label>
+            <Input
+              placeholder="Ingrese RUT"
+              {...register("rut", { required: true })}
+            />
+            {errors.rut && (
+              <p className="text-red-500">El RUT es obligatorio</p>
+            )}
+            <Label htmlFor="nombres">Nombres Conserje</Label>
+            <Input
+              placeholder="Ingrese nombres"
+              {...register("nombres", { required: true })}
+            />
+            {errors.nombres && (
+              <p className="text-red-500">Los nombres son obligatorios</p>
+            )}
+            <Label htmlFor="apellidos">Apellidos Conserje</Label>
+            <Input
+              placeholder="Ingrese apellidos"
+              {...register("apellidos", { required: true })}
+            />
+            {errors.apellidos && (
+              <p className="text-red-500">Los apellidos son obligatorios</p>
             )}
             <div className="mt-4">
               <Button type="submit">
-                {editing ? "Guardar" : "Registrar Casa"}
+                {editing ? "Guardar" : "Registrar Conserje"}
               </Button>
               {editing && (
                 <Button
@@ -149,34 +148,36 @@ const CrudResidentes = () => {
             </div>
           </form>
         </Card>
-        <div className="mt-4 overflow-x-auto ">
+        <div className="mt-4 overflow-x-auto">
           <table className="table-auto w-full border-collapse">
             <thead>
               <tr>
                 <th className="px-2 py-1 border">ID</th>
-                <th className="px-2 py-1 border">Número</th>
-                <th className="px-2 py-1 border">Calle</th>
+                <th className="px-2 py-1 border">RUT</th>
+                <th className="px-2 py-1 border">Nombres</th>
+                <th className="px-2 py-1 border">Apellidos</th>
                 <th className="px-2 py-1 border">Email</th>
                 <th className="px-2 py-1 border">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {residentes.map((residente) => (
-                <tr key={residente.id}>
-                  <td className="border px-2 py-1">{residente.id}</td>
-                  <td className="border px-2 py-1">{residente.numero}</td>
-                  <td className="border px-2 py-1">{residente.calle}</td>
-                  <td className="border px-2 py-1">{residente.email}</td>
+              {conserjes.map((conserje) => (
+                <tr key={conserje.id}>
+                  <td className="border px-2 py-1">{conserje.id}</td>
+                  <td className="border px-2 py-1">{conserje.rut}</td>
+                  <td className="border px-2 py-1">{conserje.nombres}</td>
+                  <td className="border px-2 py-1">{conserje.apellidos}</td>
+                  <td className="border px-2 py-1">{conserje.email}</td>
                   <td className="border px-2 py-1">
                     <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                      onClick={() => editResidente(residente)}
+                      onClick={() => editConserje(conserje)}
                     >
                       Editar
                     </button>
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ml-1"
-                      onClick={() => deleteResidente(residente.id)}
+                      onClick={() => deleteConserje(conserje.id)}
                     >
                       Borrar
                     </button>
@@ -191,4 +192,4 @@ const CrudResidentes = () => {
   );
 };
 
-export default CrudResidentes;
+export default CrudConserjes;

@@ -38,11 +38,11 @@ export const createAuto = async (req, res) => {
 
 // Actualizar la información de un auto
 export const updateAuto = async (req, res) => {
-  const { patente } = req.params;
-  const { marca, modelo, numero_casa } = req.body;
+  //const { patente } = req.params;
+  const { marca, modelo, numero_casa, patente, id } = req.body;
   const result = await pool.query(
-    "UPDATE autos SET marca = $1, modelo = $2, numero_casa = $3 WHERE patente = $4 RETURNING *",
-    [marca, modelo, numero_casa, patente]
+    "UPDATE autos SET marca = $1, modelo = $2, numero_casa = $3, patente = $4 WHERE id = $5 RETURNING *",
+    [marca, modelo, numero_casa, patente, id]
   );
   if (result.rowCount === 0) {
     return res.status(404).json({
@@ -54,10 +54,11 @@ export const updateAuto = async (req, res) => {
 
 // Borrar un auto
 export const deleteAuto = async (req, res) => {
-  const { patente } = req.params;
+  //const { patente } = req.params;
+  const { id } = req.body;
   const result = await pool.query(
-    "DELETE FROM autos WHERE patente = $1 RETURNING *",
-    [patente]
+    "DELETE FROM autos WHERE id = $1 RETURNING *",
+    [id]
   );
   if (result.rowCount === 0) {
     return res.status(404).json({

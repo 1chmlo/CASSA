@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Card, Input, Label } from "../components/ui";
+import { Button, Card, Input, Label, BackButton } from "../components/ui";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function RegisterConserjePage() {
   const {
@@ -9,7 +10,7 @@ function RegisterConserjePage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const navigate = useNavigate();
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
     const res = await axios.post(
@@ -80,6 +81,7 @@ function RegisterConserjePage() {
           )}
           <Button>Registrar Conserje</Button>
         </form>
+        <BackButton />
       </Card>
     </div>
   );

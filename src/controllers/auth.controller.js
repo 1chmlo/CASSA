@@ -134,7 +134,6 @@ export const loginAdmin = async (req, res) => {
     return res.status(404).json({
       message: "Correo incorrecto",
     });
-    
   }
 
   const validPassword = await bcrypt.compare(
@@ -237,4 +236,42 @@ export const registerConserje = async (req, res) => {
   );
 
   res.json(result.rows[0]);
+};
+
+export const deleteConserje = async (req, res) => {
+  //const { patente } = req.params;
+  const { id } = req.body;
+  const result = await pool.query(
+    "DELETE FROM CONSERJE WHERE id = $1 RETURNING *",
+    [id]
+  );
+  if (result.rowCount === 0) {
+    return res.status(404).json({
+      message: "conserje no encontrado",
+    });
+  }
+  return res.json(result.rows[0]);
+};
+
+export const updateConserje = async (req, res) => {
+  const { rut, nombres, apellidos, email, contrasena, id } = req.body;
+  const result = await pool.query(
+    "UPDATE CONSERJE SET rut = $1, nombres = $2, apellidos = $3, email = $4, contrasena = $5 WHERE id = $6 RETURNING *",
+    [rut, nombres, apellidos, email, contrasena, id]
+  );
+  if (result.rowCount === 0) {
+    return res.status(404).json({
+      message: "Conserje no encontrado",
+    });
+  }
+  return res.json(result.rows[0]);
+};
+
+export const getAllConserje = async (req, res) => {
+  const result = await pool.query("select * from conserje");
+  if (result.rows.length > 0) {
+    res.json(result.rows);
+  } else {
+    res.send("No se encontraron conserjes");
+  }
 };

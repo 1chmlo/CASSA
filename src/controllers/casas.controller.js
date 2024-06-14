@@ -32,29 +32,44 @@ export const getCasa = async (req, res) => {
 
 //crear una casa
 
-//actualizar correo y contraseña de una casa
+//actualizar calle y numero de una casa
 export const updateCasa = async (req, res) => {
-  const { id } = req.params;
-  const { email, contrasena, calle } = req.body;
-  const result = await pool.query(
-    "update casas set email = $1, contrasena = $2, calle = $3, numero = $4 where id = $5 returning *",
-    [email, contrasena, calle, numero]
-  );
-  console.log(result);
-  if (result.rowCount === 0) {
-    return res.status(404).json({
-      message: "casa no encontrada",
+  //const { id } = req.params;
+  const { email, contrasena, id } = req.body;
+
+  try {
+    let hashContrasena = null;
+    if (contrasena) {
+      hashContrasena = await bcrypt.hash(contrasena, 10);
+    }
+
+    const result = await pool.query(
+      "update casas set email = $1, contrasena = $2 where id = $3 returning *",
+      [email, hashContrasena, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: `casa con id ${id} no encontrada`,
+      });
+    }
+
+    return res.json(result.rows[0]);
+  } catch (error) {
+    console.error("Error updating casa:", error);
+    return res.status(500).json({
+      message: "Error updating casa",
     });
   }
-  return res.json(result.rows[0]);
 };
 
 //borrar una casa
 export const deleteCasa = async (req, res) => {
-  const { numero } = req.params;
+  //const { numero } = req.params;
+  const { id } = req.body;
   const result = await pool.query(
-    "delete from casas where numero = $1 returning *",
-    [numero]
+    "delete from casas where id = $1 returning *",
+    [id]
   );
   if (result.rowCount === 0) {
     return res.status(404).json({

@@ -39,9 +39,13 @@ export function AuthProvider({ children }) {
 
   //Ingresar Admin
   const ingresarAdmin = async (data) => {
-    const res = await axios.post("http://localhost:4000/api/login/admin", data, {
-      withCredentials: true,
-    });
+    const res = await axios.post(
+      "http://localhost:4000/api/login/admin",
+      data,
+      {
+        withCredentials: true,
+      }
+    );
     console.log(res);
     setUser(res.data);
     setIsAuthAdmin(true);
@@ -49,13 +53,40 @@ export function AuthProvider({ children }) {
 
   //Ingresar Conserje
   const ingresarConserje = async (data) => {
-    const res = await axios.post("http://localhost:4000/api/login/conserje", data, {
-      withCredentials: true,
-    });
+    const res = await axios.post(
+      "http://localhost:4000/api/login/conserje",
+      data,
+      {
+        withCredentials: true,
+      }
+    );
     console.log(res);
     setUser(res.data);
     setIsAuthConserje(true);
   };
+
+  //Ingresar Auto
+  const registrarAuto = async (data) => {
+    const res = await axios.post("http://localhost:4000/api/autos", data, {
+      withCredentials: true,
+    });
+
+    console.log(res);
+  };
+
+  //Registrar Conserje
+  const registrarConserje = async (data) => {
+    const res = await axios.post(
+      "http://localhost:4000/api/register/conserje",
+      data,
+      {
+        withCredentials: true,
+      }
+    );
+
+    console.log(res);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -68,6 +99,8 @@ export function AuthProvider({ children }) {
         ingresarResidente,
         ingresarAdmin,
         ingresarConserje,
+        registrarAuto,
+        registrarConserje,
       }}
     >
       {children}

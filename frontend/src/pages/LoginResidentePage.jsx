@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, Card, Input, Label } from "../components/ui";
+import { Button, Card, Input, Label, BackButton } from "../components/ui";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+
 function LoginResidentePage() {
   const {
     register,
@@ -48,6 +49,7 @@ function LoginResidentePage() {
           )}
           <Button>Iniciar Sesión</Button>
         </form>
+        <BackButton />
       </Card>
     </div>
   );

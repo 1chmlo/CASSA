@@ -14,6 +14,8 @@ import LoginResidentePage from "./pages/LoginResidentePage";
 import LoginConserjePage from "./pages/LoginConserjePage";
 import HomePage from "./pages/HomePage";
 import CrudResidentes from "./pages/CrudResidentes";
+import CrudAutos from "./pages/CrudAutos";
+import CrudConserjes from "./pages/CrudConserje";
 function App() {
   return (
     <>
@@ -32,10 +34,18 @@ function App() {
         <Route path="/register/conserje" element={<RegisterConserjePage />} />
 
         <Route path="/admin/panel" element={<PanelAdmin />} />
-        <Route path="/admin/panel/crud/residentes" element={<CrudResidentes />} />
+
         <Route path="/residente/agregarvisitas" element={<Agregarvisitas />} />
         <Route path="/conserje/panel" element={<Conserje />} />
         <Route path="/residente/panel" element={<Misvisitas />} />
+        {/*CRUDS*/}
+        <Route
+          path="/admin/panel/crud/residentes"
+          element={<CrudResidentes />}
+        />
+
+        <Route path="/admin/panel/crud/autos" element={<CrudAutos />} />
+        <Route path="/admin/panel/crud/conserjes" element={<CrudConserjes />} />
       </Routes>
     </>
   );
