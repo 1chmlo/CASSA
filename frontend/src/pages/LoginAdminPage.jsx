@@ -32,7 +32,7 @@ function LoginAdminPage() {
               {...register("email", {
                 required: true,
               })}
-              className="mt-1 w-full"
+              className="mt-1 w-full text-black"
             />
             {errors.email && (
               <p className="text-red-500">El email es obligatorio</p>
@@ -46,7 +46,7 @@ function LoginAdminPage() {
               {...register("contrasena", {
                 required: true,
               })}
-              className="mt-1 w-full"
+              className="mt-1 w-full text-black"
             />
             {errors.contrasena && (
               <p className="text-red-500">La contraseña es obligatoria</p>

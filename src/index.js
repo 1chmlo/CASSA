@@ -1,5 +1,6 @@
-import app from "./app.js";
+import httpServer from "./app.js";
 import { pool } from "./db.js";
 
-app.listen(4000);
-console.log("server on port", 4000);
+httpServer.listen(4000, () => {
+  console.log("Server is running on port 4000");
+});

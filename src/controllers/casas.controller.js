@@ -4,7 +4,15 @@ import { createAccessToken } from "../libs/jwt.js";
 
 //ESTA PARTE DE LAS RUTAS, SON PARA QUE EL ADMINISTRADOR GESTIONE A LOS USUARIOS (CASAS) QUE PUEDEN REGISTRAR VISITAS
 //CADA CASA ES UN USUARIO
-
+//buscar todos los ingresos
+export const getAllIngresos = async (req, res, next) => {
+  const result = await pool.query("select * from ingresos");
+  if (result.rows.length > 0) {
+    res.json(result.rows);
+  } else {
+    res.send("No se encontraron ingresos");
+  }
+};
 //buscar todas las casas
 export const getAllCasas = async (req, res, next) => {
   console.log(req.userId);

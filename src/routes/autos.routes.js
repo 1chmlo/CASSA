@@ -13,7 +13,7 @@ const router = Router();
 
 router.get("/autos", isAuthConserje, getAllAutos); //CONSERJE Y ADMIN
 
-router.get("/autos/:patente", isAuthConserje, getAuto); //CONSERJE Y ADMIN
+router.post("/auto", getAuto); //CONSERJE Y ADMIN
 
 router.post("/autos", isAuthAdmin, createAuto); //ADMIN
 

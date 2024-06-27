@@ -52,3 +52,11 @@ CREATE TABLE IF NOT EXISTS VISITA (
     FOREIGN KEY (casa_numero) REFERENCES CASAS(numero),
     CONSTRAINT unique_visita UNIQUE (nombre, apellido, fecha_ingreso, casa_id)
 );
+
+--Crear la tabla INGRESO
+CREATE TABLE IF NOT EXISTS INGRESO (
+    id SERIAL PRIMARY KEY,
+    fecha_ingreso DATE NOT NULL,
+    patente varchar(6) NOT NULL,
+    ispermitido BOOLEAN NOT NULL -- true si es permitido, false si no
+);  

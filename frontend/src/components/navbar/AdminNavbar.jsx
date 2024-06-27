@@ -1,41 +1,77 @@
+import { useAuth } from "../../context/AuthContext"; // Asegúrate de que la ruta sea correcta
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
 
-const adminLinks = [
-  {
-    name: "Administrar Residentes",
-    href: "http://localhost:5173/admin/panel/crud/residentes",
-  },
-  {
-    name: "Administrar Autos",
-    href: "http://localhost:5173/admin/panel/crud/autos",
-  },
-  {
-    name: "Administrar Conserjes",
-    href: "http://localhost:5173/admin/panel/crud/conserjes",
-  },
-  {
-    name: "Administrar Admins",
-    href: "http://localhost:5173/admin/panel/crud/admins",
-  },
-  {
-    name: "Verificar Patente",
-    href: "http://localhost:5173/admin/panel/verificarpatente",
-  },
-];
+function AdminNavbar() {
+  const { isAuthAdmin, isAuthConserje, isAuthCasa, logout } = useAuth();
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+  const adminLinks = [
+    { name: "Panel", href: "http://localhost:5173/admin/panel" },
+    {
+      name: "Administrar Residentes",
+      href: "http://localhost:5173/admin/panel/crud/residentes",
+    },
+    {
+      name: "Administrar Autos",
+      href: "http://localhost:5173/admin/panel/crud/autos",
+    },
+    {
+      name: "Administrar Conserjes",
+      href: "http://localhost:5173/admin/panel/crud/conserjes",
+    },
+    {
+      name: "Administrar Admins",
+      href: "http://localhost:5173/admin/panel/crud/admins",
+    },
+    {
+      name: "Ver Ingresos",
+      href: "http://localhost:5173/admin/panel/consultaingresos",
+    },
+    {
+      name: "Verificar Patente",
+      href: "http://localhost:5173/admin/panel/verificarpatente",
+    },
+    {
+      name: "Ver Visitas",
+      href: "http://localhost:5173/admin/panel/visitas",
+    },
+  ];
 
-export default function AdminNavbar() {
+  const conserjeLinks = [
+    { name: "Panel Conserje", href: "/conserje/panel" },
+    { name: "Verificar Patente", href: "/conserje/verificarpatente" },
+    {
+      name: "Ver Ingresos",
+      href: "http://localhost:5173/conserje/panel/consultaingresos",
+    },
+    // { name: "Consulta Patente", href: "/conserje/consultapatente" },
+    // { name: "Consulta Visita", href: "/conserje/consultavisitas" },
+  ];
+
+  const residenteLinks = [
+    // { name: "Agregar Visitas", href: "/residente/agregarvisitas" },
+    { name: "Mis Visitas", href: "/residente/panel" },
+  ];
+
+  function getLinks() {
+    if (isAuthAdmin) return adminLinks;
+    if (isAuthConserje) return conserjeLinks;
+    if (isAuthCasa) return residenteLinks;
+    return []; // Retorna una lista vacía si no se cumple ninguna condición
+  }
+
   return (
     <>
-      <Disclosure as="nav" className="bg-gray-800">
+      <Disclosure
+        as="nav"
+        className="bg-gray-800"
+        style={{ zIndex: 20, position: "relative" }}
+      >
         {({ open }) => (
           <>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -50,19 +86,27 @@ export default function AdminNavbar() {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      {adminLinks.map((link) => (
-                        <a
-                          key={link.name}
-                          href={link.href}
-                          className={classNames(
-                            "text-white px-3 py-2 rounded-md text-sm font-medium",
-                            "hover:bg-gray-700",
-                            "focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                          )}
-                        >
-                          {link.name}
-                        </a>
+                      {getLinks().map((link) => (
+                        <>
+                          <a
+                            key={link.name}
+                            href={link.href}
+                            className="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                          >
+                            {link.name}
+                          </a>
+                        </>
                       ))}
+                      {(isAuthAdmin || isAuthCasa || isAuthConserje) && (
+                        <button
+                          className="ml-4 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                          onClick={() => {
+                            logout();
+                          }}
+                        >
+                          Cerrar sesion
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -78,10 +122,9 @@ export default function AdminNavbar() {
                 </div>
               </div>
             </div>
-
             <DisclosurePanel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {adminLinks.map((link) => (
+                {getLinks().map((link) => (
                   <a
                     key={link.name}
                     href={link.href}
@@ -98,3 +141,5 @@ export default function AdminNavbar() {
     </>
   );
 }
+
+export default AdminNavbar;

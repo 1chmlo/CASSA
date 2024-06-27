@@ -24,9 +24,10 @@ const CrudConserjes = () => {
       const response = await axios.get("http://localhost:4000/api/conserje", {
         withCredentials: true,
       });
-      setConserjes(response.data);
+      setConserjes(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching conserjes:", error);
+      setConserjes([]);
     }
   };
 
@@ -84,7 +85,6 @@ const CrudConserjes = () => {
 
   return (
     <>
-      <AdminNavbar />
       <div className="p-4 px-60">
         <Card>
           <h3 className="text-2xl font-bold">

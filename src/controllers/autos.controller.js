@@ -1,3 +1,4 @@
+import { io } from "../app.js";
 import { pool } from "../db.js";
 
 // Buscar todos los autos
@@ -12,16 +13,47 @@ export const getAllAutos = async (req, res) => {
 
 // Buscar un auto por su patente
 export const getAuto = async (req, res) => {
-  const { patente } = req.params;
-  const result = await pool.query("SELECT * FROM autos WHERE patente = $1", [
-    patente,
-  ]);
-  if (result.rowCount === 0) {
-    return res.status(404).json({
-      message: "auto no encontrado",
+  const { patente } = req.body;
+
+  try {
+    // Realiza la consulta a la base de datos para verificar si la patente existe
+    const dbResult = await pool.query(
+      "SELECT * FROM autos WHERE patente = $1",
+      [patente]
+    );
+
+    if (dbResult.rowCount === 0) {
+      const dbResult2 = await pool.query(
+        "SELECT * FROM visita WHERE patente = $1",
+        [patente]
+      );
+      if (dbResult2.rowCount === 0) {
+        io.emit("imageVerified", {
+          patente: patente,
+          ingreso: false,
+        });
+        return res.status(404).json({
+          message: `Auto con patente ${patente} no encontrado`,
+        });
+      }
+      io.emit("imageVerified", {
+        ...dbResult2.rows[0],
+        ingreso: true,
+      });
+      return res.json({ ...dbResult2.rows[0] });
+    }
+    io.emit("imageVerified", {
+      ...dbResult.rows[0],
+      ingreso: true,
+    });
+    return res.json({ ...dbResult.rows[0] });
+  } catch (err) {
+    console.error("Error al procesar la solicitud:", err);
+    return res.status(500).json({
+      error: "Error al procesar la solicitud",
+      details: err.message,
     });
   }
-  return res.json(result.rows[0]);
 };
 
 // Crear un nuevo auto

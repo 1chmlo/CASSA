@@ -1,5 +1,7 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
+import Cookie from "js-cookie";
+import { set } from "react-hook-form";
 export const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -11,11 +13,23 @@ export const useAuth = () => {
 };
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [admin, setAdmin] = useState(null);
+  const [residente, setResidente] = useState(null);
+  const [conserje, setConserje] = useState(null);
   const [isAuthAdmin, setIsAuthAdmin] = useState(false);
   const [isAuthCasa, setIsAuthCasa] = useState(false);
   const [isAuthConserje, setIsAuthConserje] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const [errors, setErrors] = useState(null);
+
+  const registrarVisita = async (data) => {
+    const res = await axios.post("http://localhost:4000/api/visitas", data, {
+      withCredentials: true,
+    });
+
+    console.log(res);
+  };
 
   //registrarresidente
   const registrarResidente = async (data) => {
@@ -27,13 +41,22 @@ export function AuthProvider({ children }) {
 
     console.log(res);
   };
+
+  const registrarAdmin = async (data) => {
+    const res = await axios.post(
+      "http://localhost:4000/api/register/admin",
+      data,
+      { withCredentials: true }
+    );
+    console.log(res);
+  };
   //Ingresar Residente
   const ingresarResidente = async (data) => {
     const res = await axios.post("http://localhost:4000/api/login/casa", data, {
       withCredentials: true,
     });
     console.log(res);
-    setUser(res.data);
+    setResidente(res.data);
     setIsAuthCasa(true);
   };
 
@@ -47,7 +70,7 @@ export function AuthProvider({ children }) {
       }
     );
     console.log(res);
-    setUser(res.data);
+    setAdmin(res.data);
     setIsAuthAdmin(true);
   };
 
@@ -61,7 +84,7 @@ export function AuthProvider({ children }) {
       }
     );
     console.log(res);
-    setUser(res.data);
+    setConserje(res.data);
     setIsAuthConserje(true);
   };
 
@@ -86,11 +109,82 @@ export function AuthProvider({ children }) {
 
     console.log(res);
   };
-
+  const logout = async () => {
+    const res = await axios.post("http://localhost:4000/api/logout", {
+      withCredentials: true,
+    });
+    console.log(res);
+    setAdmin(null);
+    setResidente(null);
+    setConserje(null);
+    setIsAuthAdmin(false);
+    setIsAuthCasa(false);
+    setIsAuthConserje(false);
+    Cookie.remove("rol");
+    Cookie.remove("token");
+  };
+  useEffect(() => {
+    const rol = Cookie.get("rol");
+    const token = Cookie.get("token");
+    if (rol && token) {
+      switch (rol) {
+        case "admin":
+          axios
+            .get("http://localhost:4000/api/profile/admin", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              setAdmin(res.data);
+              setIsAuthAdmin(true);
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => setLoading(false));
+          break;
+        case "casa":
+          axios
+            .get("http://localhost:4000/api/profile/residente", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              setResidente(res.data);
+              setIsAuthCasa(true);
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => setLoading(false));
+          break;
+        case "conserje":
+          axios
+            .get("http://localhost:4000/api/profile/conserje", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              setConserje(res.data);
+              setIsAuthConserje(true);
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+            .finally(() => setLoading(false));
+          break;
+        default:
+          console.log("No hay un rol definido");
+          setLoading(false);
+          break;
+      }
+    } else {
+      setLoading(false);
+    }
+  }, []);
   return (
     <AuthContext.Provider
       value={{
-        user,
+        admin,
+        residente,
+        conserje,
         isAuthAdmin,
         isAuthCasa,
         isAuthConserje,
@@ -101,6 +195,10 @@ export function AuthProvider({ children }) {
         ingresarConserje,
         registrarAuto,
         registrarConserje,
+        logout,
+        loading,
+        registrarVisita,
+        registrarAdmin,
       }}
     >
       {children}

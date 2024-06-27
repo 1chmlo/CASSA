@@ -3,7 +3,7 @@ import path from "path";
 import { exec } from "child_process";
 import multer from "multer";
 import { pool } from "../db.js";
-
+import { io } from "../app.js";
 // Define el middleware de multer
 const upload = multer({ dest: "uploads/" });
 
@@ -16,12 +16,14 @@ export function verifyImage(req, res, next) {
   }
 
   const imagePath = req.file.path;
+  const imageName = req.file.originalname;
 
   // Ruta del archivo con extensión jpg
   const imagePathJpg = path.join(
     path.dirname(imagePath),
     path.basename(imagePath, path.extname(imagePath)) + ".jpg"
   );
+  const rutaimagen = imagePathJpg.split("\\").pop();
 
   // Renombrar el archivo a .jpg
   fs.renameSync(imagePath, imagePathJpg);
@@ -31,11 +33,11 @@ export function verifyImage(req, res, next) {
     `python ./src/verifypatente.py ${imagePathJpg}`,
     async (error, stdout, stderr) => {
       // Elimina la imagen temporalmente guardada
-      fs.unlink(imagePathJpg, (err) => {
-        if (err) {
-          console.error("Error al eliminar el archivo temporal:", err);
-        }
-      });
+      // fs.unlink(imagePathJpg, (err) => {
+      //   if (err) {
+      //     console.error("Error al eliminar el archivo temporal:", err);
+      //   }
+      // });
 
       if (error) {
         console.error("Error al ejecutar el script de Python:", error);
@@ -57,12 +59,41 @@ export function verifyImage(req, res, next) {
         );
 
         if (dbResult.rowCount === 0) {
-          return res.status(404).json({
-            message: `Auto con patente ${patente} no encontrado`,
+          const dbResult2 = await pool.query(
+            "SELECT * FROM visita WHERE patente = $1",
+            [patente]
+          );
+          if (dbResult2.rowCount === 0) {
+            io.emit("imageVerified", {
+              patente: patente,
+              image: rutaimagen,
+              ingreso: false,
+            });
+            return res.status(404).json({
+              message: `Auto con patente ${patente} no encontrado`,
+            });
+          }
+          io.emit("imageVerified", {
+            ...dbResult2.rows[0],
+            image: rutaimagen,
+            ingreso: true,
           });
+          return res.json({ ...dbResult2.rows[0], image: rutaimagen });
+          // io.emit("imageVerified", {
+          //   patente: patente,
+          //   image: rutaimagen,
+          //   ingreso: false,
+          // });
+          // return res.status(404).json({
+          //   message: `Auto con patente ${patente} no encontrado`,
+          // });
         }
-
-        return res.json(dbResult.rows[0]);
+        io.emit("imageVerified", {
+          ...dbResult.rows[0],
+          image: rutaimagen,
+          ingreso: true,
+        });
+        return res.json({ ...dbResult.rows[0], image: rutaimagen });
       } catch (err) {
         console.error("Error al procesar la solicitud:", err);
         return res.status(500).json({

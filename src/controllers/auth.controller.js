@@ -91,10 +91,9 @@ export const registerCasa = async (req, res) => {
 };
 
 // Obtener las visitas de una casa
-export const profile = async (req, res) => {
+export const CasaProfile = async (req, res) => {
   const casa_id = req.userId;
   const casa_numero = req.userNumero;
-  console.log(casa_id);
   const result = await pool.query("SELECT * FROM casas where id = $1", [
     casa_id,
   ]);
@@ -102,7 +101,37 @@ export const profile = async (req, res) => {
     const { contrasena, ...perfil } = result.rows[0];
     res.json(perfil);
   } else {
-    res.send("No se encontraro el perfil");
+    res.send("No se encontró el perfil");
+  }
+};
+
+// Obtener las visitas de una casa
+export const ConserjeProfile = async (req, res) => {
+  const conserje_id = req.userId;
+  const casa_numero = req.userNumero;
+  const result = await pool.query("SELECT * FROM CONSERJE where id = $1", [
+    conserje_id,
+  ]);
+  if (result.rows.length > 0) {
+    const { contrasena, ...perfil } = result.rows[0];
+    res.json(perfil);
+  } else {
+    res.send("No se encontró el perfil");
+  }
+};
+
+// Obtener las visitas de una casa
+export const AdminProfile = async (req, res) => {
+  const admin_id = req.userId;
+  const casa_numero = req.userNumero;
+  const result = await pool.query("SELECT * FROM ADMIN where id = $1", [
+    admin_id,
+  ]);
+  if (result.rows.length > 0) {
+    const { contrasena, ...perfil } = result.rows[0];
+    res.json(perfil);
+  } else {
+    res.send("No se encontró el perfil");
   }
 };
 
@@ -171,6 +200,44 @@ export const loginAdmin = async (req, res) => {
     path: "/",
   });
 
+  return res.json(result.rows[0]);
+};
+
+export const getAllAdmin = async (req, res) => {
+  const result = await pool.query("select * from admin");
+  if (result.rows.length > 0) {
+    res.json(result.rows);
+  } else {
+    res.send("No se encontraron admin");
+  }
+};
+
+export const updateAdmin = async (req, res) => {
+  const { rut, nombres, apellidos, email, contrasena, id } = req.body;
+  const result = await pool.query(
+    "UPDATE ADMIN SET rut = $1, nombres = $2, apellidos = $3, email = $4, contrasena = $5 WHERE id = $6 RETURNING *",
+    [rut, nombres, apellidos, email, contrasena, id]
+  );
+  if (result.rowCount === 0) {
+    return res.status(404).json({
+      message: "Admin no encontrado",
+    });
+  }
+  return res.json(result.rows[0]);
+};
+
+export const deleteAdmin = async (req, res) => {
+  //const { patente } = req.params;
+  const { id } = req.body;
+  const result = await pool.query(
+    "DELETE FROM ADMIN WHERE id = $1 RETURNING *",
+    [id]
+  );
+  if (result.rowCount === 0) {
+    return res.status(404).json({
+      message: "Admin no encontrado",
+    });
+  }
   return res.json(result.rows[0]);
 };
 
