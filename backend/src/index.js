@@ -1,6 +1,8 @@
 import httpServer from "./app.js";
 import { pool } from "./db.js";
 
-httpServer.listen(4000, () => {
+const port = process.env.PORT || 4000;
+
+httpServer.listen(port, () => {
   console.log("Server is running on port 4000");
 });
