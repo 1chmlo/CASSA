@@ -6,7 +6,7 @@ export const pool = new Pool({
   host: "localhost",
   password: "1234",
   user: "postgres",
-  database: "cassadb",
+  database: "cassadb2",
 });
 pool.on("connect", () =>
   console.log("Conexion establecida con la base de datos")

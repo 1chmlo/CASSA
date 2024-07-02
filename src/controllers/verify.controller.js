@@ -30,7 +30,7 @@ export function verifyImage(req, res, next) {
 
   // Ejecuta el script de Python con la imagen como argumento
   exec(
-    `python ./src/verifypatente.py ${imagePathJpg}`,
+    `python ./src/verifypatente2.py ${imagePathJpg}`,
     async (error, stdout, stderr) => {
       // Elimina la imagen temporalmente guardada
       // fs.unlink(imagePathJpg, (err) => {
