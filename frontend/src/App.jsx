@@ -39,6 +39,7 @@ import ConsultaVisitasAdmin from "./pages/ConsultaVisitasAdmin.jsx";
 import ConsultaIngresosAdmin from "./pages/ConsultaIngresosAdmin.jsx";
 import ConsultaIngresos from "./pages/ConsultaIngresos.jsx";
 import IngresoManual from "./pages/IngresoManual.jsx";
+import IngresoManualConserje from "./pages/IngresoManualConserje.jsx";
 function App() {
   const { isAuthAdmin, isAuthCasa, isAuthConserje, loading } = useAuth();
   // if (isAuthAdmin) console.log("eres admin", isAuthAdmin);
@@ -76,6 +77,10 @@ function App() {
             <Route
               path="/conserje/panel/consultaingresos"
               element={<ConsultaIngresos />}
+            />
+            <Route
+              path="/conserje/panel/ingresomanual"
+              element={<IngresoManualConserje/>}
             />
             {/* <Route
               path="/conserje/consultapatente"
@@ -142,6 +147,7 @@ function App() {
               element={<Agregarvisitas />}
             /> */}
             <Route path="/residente/panel" element={<CrudVisitas />} />
+            
           </Route>
         </Routes>
       </>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { set } from 'date-fns';
 
-const IngresoManual = () => {
+const IngresoManualConserje = () => {
   const [manualPatente, setManualPatente] = useState('');
   const [manualPatenteNoEncontrada, setManualPatenteNoEncontrada] = useState('');
   const [patenteEncontrada, setPatenteEncontrada] = useState(false);
@@ -69,15 +69,15 @@ const IngresoManual = () => {
       console.log("Respuesta del servidor:", responseFromServer.data);
       setIngresoRegistrado(true);
       console.log("es visita?:", isVisita);
-        if(isVisita){
-            console.log(response.id);
-           const responsedelete =  await axios.post("http://localhost:4000/api/visita", {
-                id:  response.id,
+         if(isVisita){
+             console.log(response.id);
+            const responsedelete =  await axios.post("http://localhost:4000/api/visita", {
+                 id:  response.id,
                 
-              });
-              alert('Visita ingresada correctamente, redirigiendo a panel de administrador');
+               });
+               alert('Visita ingresada correctamente, redirigiendo a panel de conserje');
         }
-        navigate('/admin/panel');
+         navigate('/conserje/panel');
     } catch (error) {
       console.error("Error al registrar el ingreso:", error);
     }
@@ -99,7 +99,7 @@ const IngresoManual = () => {
       );
       console.log("Respuesta del servidor:", responseFromServer.data);
       setIngresoRegistrado(true);
-        navigate('/admin/panel');
+        navigate('/conserje/panel');
     } catch (error) {
       console.error("Error al registrar el ingreso:", error);
     }
@@ -151,4 +151,4 @@ const IngresoManual = () => {
   );
 };
 
-export default IngresoManual;
+export default IngresoManualConserje;

@@ -11,7 +11,7 @@ const VerificarPatente2 = ({ setIsOpen }) => {
   const [ingresoRegistrado, setIngresoRegistrado] = useState(false); // Estado para verificar si ya se registró el ingreso
 
   useEffect(() => {
-    const audio = new Audio("/AMOGUS.mp3");
+    const audio = new Audio("/NOTIFICACION.mp3");
     audio.play();
   }, [response]);
 
@@ -89,7 +89,7 @@ const VerificarPatente2 = ({ setIsOpen }) => {
 
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div className="relative inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="relative w-full h-3/4 bg-zinc-900 border rounded-lg shadow dark:bg-gray-900 flex flex-col md:flex-row p-5 max-w-screen-lg overflow-auto">
           <img
             className="w-full md:w-2/3 h-auto rounded-l-lg object-contain"
@@ -158,6 +158,7 @@ const VerificarPatente2 = ({ setIsOpen }) => {
                 <input
                   type="text"
                   value={manualPatente}
+                  maxLength={6}
                   onChange={handleManualPatenteChange}
                   placeholder="Ingrese la patente manualmente"
                   className="w-full px-3 py-2 placeholder-gray-400 text-gray-700 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline border border-gray-300"

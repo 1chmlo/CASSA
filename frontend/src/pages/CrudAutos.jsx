@@ -95,6 +95,7 @@ const CrudAutos = () => {
           <form onSubmit={onSubmit}>
             <Label htmlFor="patente">Patente</Label>
             <Input
+            maxLength={6}
               placeholder="Ingrese la patente"
               {...register("patente", { required: true })}
             />

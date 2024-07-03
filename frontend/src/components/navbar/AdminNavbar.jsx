@@ -53,6 +53,10 @@ function AdminNavbar() {
       name: "Ver Ingresos",
       href: "http://localhost:5173/conserje/panel/consultaingresos",
     },
+    {
+      name: "Ingreso Manual",
+      href: "http://localhost:5173/conserje/panel/ingresomanual",
+    },
     // { name: "Consulta Patente", href: "/conserje/consultapatente" },
     // { name: "Consulta Visita", href: "/conserje/consultavisitas" },
   ];

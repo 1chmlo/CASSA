@@ -100,6 +100,7 @@ const CrudVisitas = () => {
         <form onSubmit={onSubmit}>
           <Label htmlFor="nombre">Nombre</Label>
           <Input
+          maxLength={20}
             placeholder="Ingrese nombre"
             {...register("nombre", { required: true })}
           />
@@ -108,6 +109,7 @@ const CrudVisitas = () => {
           )}
           <Label htmlFor="apellido">Apellido</Label>
           <Input
+          maxLength={20}
             placeholder="Ingrese apellido"
             {...register("apellido", { required: true })}
           />
@@ -126,18 +128,20 @@ const CrudVisitas = () => {
           )}
           <Label htmlFor="rut">RUT</Label>
           <Input
+            maxLength={11}
             placeholder="Ingrese RUT"
             {...register("rut", { required: true })}
           />
           {errors.rut && <p className="text-red-500">El RUT es obligatorio</p>}
           <Label htmlFor="patente">Patente</Label>
           <Input
+            maxLength={6}
             placeholder="Ingrese patente"
             {...register("patente", { required: true })}
           />
-          {errors.patente && (
+          {/* {errors.patente && (
             <p className="text-red-500">La patente es obligatoria</p>
-          )}
+          )} */}
           <Label htmlFor="comentario">Comentario</Label>
           <Input
             placeholder="Ingrese comentario"

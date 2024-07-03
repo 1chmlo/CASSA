@@ -114,7 +114,7 @@ const CrudConserjes = () => {
               {...register("rut", { required: true })}
             />
             {errors.rut && (
-              <p className="text-red-500">El RUT es obligatorio</p>
+              <p maxLength={11} className="text-red-500">El RUT es obligatorio</p>
             )}
             <Label htmlFor="nombres">Nombres Conserje</Label>
             <Input
