@@ -33,6 +33,10 @@ function AdminNavbar() {
       href: "http://localhost:5173/admin/panel/consultaingresos",
     },
     {
+      name: "Ingreso Manual",
+      href: "http://localhost:5173/admin/panel/ingresomanual",
+    },
+    {
       name: "Verificar Patente",
       href: "http://localhost:5173/admin/panel/verificarpatente",
     },

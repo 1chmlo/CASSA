@@ -40,13 +40,13 @@ export const getAuto = async (req, res) => {
         ...dbResult2.rows[0],
         ingreso: true,
       });
-      return res.json({ ...dbResult2.rows[0] });
+      return res.json({ ...dbResult2.rows[0], visita: true });
     }
     io.emit("imageVerified", {
       ...dbResult.rows[0],
       ingreso: true,
     });
-    return res.json({ ...dbResult.rows[0] });
+    return res.json({ ...dbResult.rows[0], visita: false});
   } catch (err) {
     console.error("Error al procesar la solicitud:", err);
     return res.status(500).json({

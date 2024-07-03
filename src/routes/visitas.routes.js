@@ -23,6 +23,8 @@ router.post("/visitas", isAuthCasa, createVisita); //CASA
 
 router.put("/visitas", isAuthCasa, updateVisita); //CASA
 
-router.delete("/visitas", isAuthCasa, deleteVisita); //CASA
+router.delete("/visitas", deleteVisita); //CASA
+
+router.post("/visita", deleteVisita); //CASA
 
 export default router;

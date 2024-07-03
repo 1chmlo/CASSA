@@ -77,8 +77,9 @@ export function verifyImage(req, res, next) {
             ...dbResult2.rows[0],
             image: rutaimagen,
             ingreso: true,
+            visita: true,
           });
-          return res.json({ ...dbResult2.rows[0], image: rutaimagen });
+          return res.json({ ...dbResult2.rows[0], image: rutaimagen, visita: true });
           // io.emit("imageVerified", {
           //   patente: patente,
           //   image: rutaimagen,
@@ -92,8 +93,9 @@ export function verifyImage(req, res, next) {
           ...dbResult.rows[0],
           image: rutaimagen,
           ingreso: true,
+          visita: false,
         });
-        return res.json({ ...dbResult.rows[0], image: rutaimagen });
+        return res.json({ ...dbResult.rows[0], image: rutaimagen, visita: false});
       } catch (err) {
         console.error("Error al procesar la solicitud:", err);
         return res.status(500).json({

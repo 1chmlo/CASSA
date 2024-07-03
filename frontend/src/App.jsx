@@ -38,6 +38,7 @@ import ConsultaVisitas from "./pages/ConsultaVisitas.jsx";
 import ConsultaVisitasAdmin from "./pages/ConsultaVisitasAdmin.jsx";
 import ConsultaIngresosAdmin from "./pages/ConsultaIngresosAdmin.jsx";
 import ConsultaIngresos from "./pages/ConsultaIngresos.jsx";
+import IngresoManual from "./pages/IngresoManual.jsx";
 function App() {
   const { isAuthAdmin, isAuthCasa, isAuthConserje, loading } = useAuth();
   // if (isAuthAdmin) console.log("eres admin", isAuthAdmin);
@@ -97,6 +98,7 @@ function App() {
               path="/register/residente"
               element={<RegisterResidentePage />}
             />
+            <Route path="/admin/panel/ingresomanual" element={<IngresoManual />} />
             <Route
               path="/admin/panel/visitas"
               element={<ConsultaVisitasAdmin />}
